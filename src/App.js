@@ -1,24 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
+import { Container } from '@material-ui/core';
+
+import NavBar from './components/navBar/NavBar';
+import Chart from './components/chart/Chart';
+import ShowCase from './components/showCase/ShowCase';
+import Table from './components/table/DataTable';
+import Loader from './components/Loader';
+
+import { fetchCasesForAll, fetchIndiaData } from './API/api';
 
 function App() {
+  const [india, setIndia] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [tableData, setTableData] = useState([]);
+
+  const [totalData, setTotalData] = useState({
+    totalConfirmed: 0,
+    totalRecovered: 0,
+    totalDeaths: 0,
+    newConfirmed: 0,
+    newRecovered: 0,
+    newDeaths: 0,
+  });
+
+ 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Container maxWidth='xl'>
+            <NavBar />
+            <ShowCase totalData={totalData} />
+            <Chart totalData={totalData} />
+            <Table tableData={tableData} setTotalData={setTotalData} />
+          </Container>
+        </>
+      )}
+    </>
   );
 }
 
